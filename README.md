@@ -2,7 +2,7 @@
 
 # React Native Calendars 🗓️ 📆
 
-[![Version](https://img.shields.io/npm/v/react-native-calendars.svg)](https://www.npmjs.com/package/react-native-calendars)
+[![Version](https://img.shields.io/npm/v/react-native-calendars.svg)](https://www.npmjs.com/package/@ngima/react-native-calendars)
 [![Build Status](https://travis-ci.org/wix/react-native-calendars.svg?branch=master)](https://travis-ci.org/wix/react-native-calendars)
 
 This module includes various customizable **React-Native** calendar components.
@@ -30,20 +30,22 @@ This project is compatible with Expo/CRNA (without ejecting), and the examples h
 ## Installation
 
 Using NPM:
+
 ```
-$ npm install --save react-native-calendars
+$ npm install --save @ngima/react-native-calendars
 ```
 
 Using Yarn:
+
 ```
-$ yarn add react-native-calendars
+$ yarn add @ngima/react-native-calendars
 ```
 
 The solution is implemented in JavaScript so no native module linking is required.
 
 ## Usage
 
-`import {`[Calendar](#calendar), [CalendarList](#calendarlist), [Agenda](#agenda)`} from 'react-native-calendars';`
+`import {`[Calendar](#calendar), [CalendarList](#calendarlist), [Agenda](#agenda)`} from '@ngima/react-native-calendars';`
 
 All parameters for components are optional. By default the month of current local date will be displayed.
 
@@ -64,7 +66,7 @@ Parameters that require date types accept `YYYY-MM-DD` formatted `date-strings`,
 Calendars can be localized by adding custom locales to `LocaleConfig` object:
 
 ```javascript
-import {LocaleConfig} from 'react-native-calendars';
+import {LocaleConfig} from '@ngima/react-native-calendars';
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
