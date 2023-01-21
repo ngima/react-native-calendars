@@ -2,17 +2,17 @@ import findIndex from 'lodash/findIndex';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {forwardRef, useImperativeHandle, useRef, useEffect, useState, useCallback, useMemo} from 'react';
-import {FlatList, View, ViewStyle, FlatListProps} from 'react-native';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { FlatList, View, ViewStyle, FlatListProps } from 'react-native';
 
-import {extractHeaderProps, extractCalendarProps} from '../componentUpdater';
-import {xdateToData, parseDate, toMarkingFormat} from '../interface';
-import {page, sameDate, sameMonth} from '../dateutils';
+import { extractHeaderProps, extractCalendarProps } from '../componentUpdater';
+import { xdateToData, parseDate, toMarkingFormat } from '../interface';
+import { page, sameDate, sameMonth } from '../dateutils';
 import constants from '../commons/constants';
-import {useDidUpdate} from '../hooks';
-import {ContextProp} from '../types';
+import { useDidUpdate } from '../hooks';
+import { ContextProp } from '../types';
 import styleConstructor from './style';
-import Calendar, {CalendarProps} from '../calendar';
+import Calendar, { CalendarProps } from '../calendar';
 import CalendarListItem from './item';
 import CalendarHeader from '../calendar/header/index';
 
@@ -38,6 +38,12 @@ export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any
   showScrollIndicator?: boolean;
   /** Whether to animate the auto month scroll */
   animateScroll?: boolean;
+  /** 
+   * Custom placeholder to be rendered while calendar is not visible. 
+   * Especially useful when scrolling fast. If not provided, the 
+   * default behaviour is to render a Text component with the datestring. 
+   * */
+  renderPlaceholder?: (year: number, month: number) => React.ReactElement;
 }
 
 export interface CalendarListImperativeMethods {
@@ -99,7 +105,8 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     onMomentumScrollEnd,
     /** FlatList props */
     onEndReachedThreshold,
-    onEndReached
+    onEndReached,
+    renderPlaceholder
   } = props;
 
   const calendarProps = extractCalendarProps(props);
@@ -132,7 +139,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   }, [propsStyle]);
 
   const initialDateIndex = useMemo(() => {
-    return findIndex(items, function(item) {
+    return findIndex(items, function (item) {
       return item.toString() === initialDate.current?.toString();
     });
   }, [items]);
@@ -171,7 +178,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
 
     if (scrollAmount !== 0) {
       // @ts-expect-error
-      list?.current?.scrollToOffset({offset: scrollAmount, animated});
+      list?.current?.scrollToOffset({ offset: scrollAmount, animated });
     }
   };
 
@@ -182,7 +189,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
 
     if (scrollAmount !== 0) {
       // @ts-expect-error
-      list?.current?.scrollToOffset({offset: scrollAmount, animated: animateScroll});
+      list?.current?.scrollToOffset({ offset: scrollAmount, animated: animateScroll });
     }
   }, [calendarSize]);
 
@@ -214,7 +221,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   }, []);
 
   const isDateInRange = useCallback((date) => {
-    for(let i = -range.current; i <= range.current; i++) {
+    for (let i = -range.current; i <= range.current; i++) {
       const newMonth = currentMonth?.clone().addMonths(i, true);
       if (sameMonth(date, newMonth)) {
         return true;
@@ -223,7 +230,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     return false;
   }, [currentMonth]);
 
-  const renderItem = useCallback(({item}: {item: XDate}) => {
+  const renderItem = useCallback(({ item }: { item: XDate }) => {
     const dateString = toMarkingFormat(item);
     const [year, month] = dateString.split('-');
     const testId = `${testID}.item_${year}-${month}`;
@@ -240,6 +247,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
         calendarHeight={calendarHeight}
         scrollToMonth={scrollToMonth}
         visible={isDateInRange(item)}
+        renderPlaceholder={renderPlaceholder}
       />
     );
   }, [horizontal, calendarStyle, calendarWidth, testID, getMarkedDatesForItem, isDateInRange, calendarProps]);
@@ -266,7 +274,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     viewAreaCoveragePercentThreshold: 20
   });
 
-  const onViewableItemsChanged = useCallback(({viewableItems}: any) => {
+  const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
     const newVisibleMonth = parseDate(viewableItems[0]?.item);
     if (!sameDate(visibleMonth?.current, newVisibleMonth)) {
       visibleMonth.current = newVisibleMonth;
