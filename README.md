@@ -2,8 +2,29 @@
 
 # React Native Calendars 🗓️ 📆
 
-[![Version](https://img.shields.io/npm/v/react-native-calendars.svg)](https://www.npmjs.com/package/@ngima/react-native-calendars)
+[![Version](https://img.shields.io/npm/v/@ngima/react-native-calendars.svg)](https://www.npmjs.com/package/@ngima/react-native-calendars)
 [![Build Status](https://travis-ci.org/wix/react-native-calendars.svg?branch=master)](https://travis-ci.org/wix/react-native-calendars)
+
+## What's new
+
+- Add support for custom placeholder for CalendarList
+```diff
+<CalendarList
+  // Callback which gets executed when visible months change in scroll view. Default = undefined
+  onVisibleMonthsChange={(months) => {console.log('now these months are visible', months);}}
+  // Max amount of months allowed to scroll to the past. Default = 50
+  pastScrollRange={50}
+  // Max amount of months allowed to scroll to the future. Default = 50
+  futureScrollRange={50}
+  // Enable or disable scrolling of calendar list
+  scrollEnabled={true}
+  // Enable or disable vertical scroll indicator. Default = false
+  showScrollIndicator={true}
++ renderPlaceholder={(year: number, month: number) => <CustomPlaceHolder year={year} month={month}/>}
+  ...calendarParams
+/>
+```
+---
 
 This module includes various customizable **React-Native** calendar components.
 
@@ -16,7 +37,7 @@ The package is both **Android** and **iOS** compatible.
 You can run example module by performing these steps:
 
 ```
-$ git clone git@github.com:wix/react-native-calendars.git
+$ git clone git@github.com:ngima/react-native-calendars.git
 $ cd react-native-calendars
 $ npm install
 $ cd ios && pod install && cd ..
