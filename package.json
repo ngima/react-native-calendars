@@ -1,9 +1,11 @@
 {
   "name": "@ngima/react-native-calendars",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
   "description": "React Native Calendar Components",
+  "react-native": "src/index",
+  "source": "src/index",
   "scripts": {
     "build": "xcodebuild -project ios/CalendarsExample.xcodeproj build",
     "build:ts": "tsc",
